@@ -1,0 +1,152 @@
+<p>pagina-pagamentos works!</p>
+<div class="flex ml-10 mt-10 bg-gray-800 shadow-2xl rounded-lg p-5 m-10">
+  <div class="bg-gray-800 p-8 rounded-md w-full ">
+    <div class=" flex items-center justify-between pb-6">
+      <div>
+        <h1 class="text-red-600 font-bold">Pagamentos</h1>
+      </div>
+    </div>
+    <div>
+      <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto ">
+        <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+          <table class="min-w-full leading-normal ">
+            <thead>
+            <tr>
+              <th
+                class="px-5 py-3 border-b-2 border-gray-400 bg-gray-800 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                Tipo
+              </th>
+              <th
+                class="px-5 py-3 border-b-2 border-gray-400 bg-gray-800 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                Data Emissão
+              </th>
+              <th
+                class="px-5 py-3 border-b-2 border-gray-400 bg-gray-800 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                Data Pagamento
+              </th>
+              <th
+                class="px-5 py-3 border-b-2 border-gray-400 bg-gray-800 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                Descrição
+              </th>
+              <th
+                class="px-5 py-3 border-b-2 border-gray-400 bg-gray-800 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                Valor
+              </th>
+              <th
+                class="px-5 py-3 border-b-2 border-gray-400 bg-gray-800 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                Estado
+              </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let p of pagamentos">
+              <td class="px-5 py-5 border-b border-gray-400 bg-gray-800 text-sm">
+                <div class="flex items-center">
+                  <p class="text-gray-400 whitespace-no-wrap">
+                    {{ p.TipoPagamento }}
+                  </p>
+                </div>
+              </td>
+              <td class="px-5 py-5 border-b border-gray-400 bg-gray-800 text-sm">
+                <p class="text-gray-400 whitespace-no-wrap">
+                  {{ p.DataEmissao | date: 'yyyy-MM-dd HH:mm' }}
+                </p>
+              </td>
+              <td class="px-5 py-5 border-b border-gray-400 bg-gray-800 text-sm">
+                <p class="text-gray-400 whitespace-no-wrap">
+                  {{ p.DataPagamento ? (p.DataPagamento | date:'yyyy-MM-dd HH:mm') : "---------------------" }}
+                </p>
+              </td>
+              <td class="px-5 py-5 border-b border-gray-400 bg-gray-800 text-sm">
+                <p class="text-gray-400 whitespace-no-wrap">
+                  {{ p.Descricao }}
+                </p>
+              </td>
+              <td class="px-5 py-5 border-b border-gray-400 bg-gray-800 text-sm">
+                <p class="text-gray-400 whitespace-no-wrap">
+                  {{ p.ValorPagar.toFixed(2) }}
+                </p>
+              </td>
+              <td class="px-5 py-5 border-b border-gray-400 bg-gray-800 text-sm">
+                <button (click)="p.Estado == 'Não Pago' ? openModal(p.Id) : null" class="rounded py-1 px-2 relative inline-block font-semibold text-white leading-tight"
+                  [ngClass]="{
+                    'bg-green-500 pointer-events-none cursor-default': p.Estado == 'Pago',
+                    'bg-yellow-500 hover:bg-yellow-400': p.Estado == 'Não Pago',
+                    'bg-red-600 pointer-events-none': p.Estado == 'Terminou o Prazo' }">
+                  <p>{{ p.Estado }}</p>
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main modal -->
+<div #staticModal id="staticModal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true" class="hidden fixed inset-0 items-center justify-center z-50 top-0 left-0 right-0 w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+  <div class="relative w-full max-w-2xl max-h-full">
+    <!-- Modal content -->
+    <div *ngFor="let pag of modalConteudo" class="relative bg-white rounded-lg shadow dark:bg-gray-900">
+<!--      <form [formGroup]="pagamentoForm">-->
+      <!-- Modal header -->
+      <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+          ATENÇÃO!!
+        </h3>
+        <button (click)="closeModal()" type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="defaultModal">
+          <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+          <span class="sr-only">Close modal</span>
+        </button>
+      </div>
+      <div class="border-b dark:border-gray-600 py-1">
+        <p class="text-white ml-6">{{ pag.Descricao }}</p>
+      </div>
+      <!-- Modal body -->
+      <p class="ml-6 my-3 text-gray-900 dark:text-white">
+        Connect wallet
+      </p>
+      <ul class="mx-6 my-4 space-y-3">
+        <li>
+          <a class="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
+            <img src="https://www.freepnglogos.com/uploads/paypal-logo-png-7.png" alt="PayPal logo" class="h-5">
+            <span class="flex-1 ml-3 whitespace-nowrap">PayPal</span>
+            <span class="inline-flex items-center justify-center px-2 py-0.5 ml-3 text-xs font-medium text-gray-500 bg-gray-200 rounded dark:bg-gray-700 dark:text-gray-400">Popular</span>
+          </a>
+        </li>
+        <li>
+          <a class="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
+            <img src="https://play-lh.googleusercontent.com/nDKhDELMEjag8qJ9aKAjfTSzWZKVg3tY2OZ-eo8Jp8hxYDgifCFQoNOqxDwTaAW-O8o=w240-h480" alt="MBway logo" class="h-5">
+            <span class="flex-1 ml-3 whitespace-nowrap">MBway</span>
+          </a>
+        </li>
+        <li>
+          <a class="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
+            <img src="https://e7.pngegg.com/pngimages/52/580/png-clipart-bank-account-computer-icons-bank-text-payment.png" alt="Transferencia Bancaria logo" class="h-5">
+            <span class="flex-1 ml-3 whitespace-nowrap">Transferência Bancária</span>
+          </a>
+        </li>
+        <li>
+          <a class="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
+            <img src="https://w7.pngwing.com/pngs/306/450/png-transparent-brand-brands-logo-logos-skrill-logos-brands-icon.png" alt="Skrill logo" class="h-5">
+            <span class="flex-1 ml-3 whitespace-nowrap">Skrill</span>
+          </a>
+        </li>
+        <li>
+          <a class="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
+            <img src="https://i0.wp.com/fairy.co.nz/wp-content/uploads/2020/09/paysafecard-logo.png?fit=300%2C300&ssl=1" alt="Paysafe logo" class="h-5">
+            <span class="flex-1 ml-3 whitespace-nowrap">Paysafe</span>
+          </a>
+        </li>
+      </ul>
+      <!-- Modal footer -->
+      <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
+        <button (click)="pagarPagamento(pag.Id, pag.TipoPagamento)" data-modal-hide="defaultModal" type="button" class="bg-red-600 hover:bg-red-800 py-1 px-2 rounded text-white text-sm">Pagar</button>
+        <button (click)="cancelarPagamento(pag.Id)" data-modal-hide="defaultModal" type="button" class="bg-gray-900 hover:bg-gray-950 py-1 px-2 rounded text-white text-sm">Recusar</button>
+      </div>
+<!--      </form>-->
+    </div>
+  </div>
+</div>

@@ -1,0 +1,79 @@
+<section class="max-w-4xl p-6 mx-auto bg-indigo-600 rounded-md shadow-md dark:bg-gray-800 my-14">
+  <h1 class="text-xl font-bold text-red capitalize text-red-600">Adicionar Conteudo</h1>
+  <form [formGroup]="newConteudoForm">
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <!-- Common labels here -->
+      <div id="common-labels">
+        <!-- Add other series-specific labels here -->
+        <div class="mb-2">
+          <div class="text-red-400 px-4 py-2 font-semibold">Nome</div>
+          <input formControlName="Nome" class="w-full rounded bg-gray-700 px-3 py-2 my-0.5 focus:outline-none border border-gray-600 focus:border-red-600 active:border-red-600" placeholder="Nome">
+        </div>
+        <div class="mb-2">
+          <div class="text-red-400 px-4 py-2 font-semibold">Direção</div>
+          <input formControlName="Realizador" class="w-full rounded bg-gray-700 px-4 py-2 my-0.5 focus:outline-none border border-gray-600 focus:border-red-600 active:border-red-600" placeholder="Realizador">
+        </div>
+        <div class="mb-2">
+          <div class="text-red-400 px-4 py-2 font-semibold">Rating</div>
+          <input formControlName="Rating" class="w-full rounded bg-gray-700 px-4 py-2 my-0.5 focus:outline-none border border-gray-600 focus:border-red-600 active:border-red-600" placeholder="Rating">
+        </div>
+        <div class="mb-2">
+          <div class="text-red-400 px-4 py-2 font-semibold">Sinopse</div>
+          <input formControlName="Sinopse" class="w-full rounded bg-gray-700 px-4 py-2 my-0.5 focus:outline-none border border-gray-600 focus:border-red-600 active:border-red-600" placeholder="Sinopse">
+        </div>
+        <div class="mb-2">
+          <div class="text-red-400 px-4 py-2 font-semibold">Data de Lançamento</div>
+          <input formControlName="DataReleased" class="w-full rounded bg-gray-700 px-4 py-2 my-0.5 focus:outline-none border border-gray-600 focus:border-red-600 active:border-red-600" placeholder="Data de Lançamento">
+        </div>
+        <div class="mb-2">
+          <div class="text-red-400 px-4 py-2 font-semibold">Poster</div>
+          <input formControlName="Poster" class="w-full rounded bg-gray-700 px-4 py-2 my-0.5 focus:outline-none border border-gray-600 focus:border-red-600 active:border-red-600" placeholder="Poster">
+        </div>
+        <div class="mb-2">
+          <div class="text-red-400 px-4 py-2 font-semibold">Trailer</div>
+          <input formControlName="Trailer" class="w-full rounded bg-gray-700 px-4 py-2 my-0.5 focus:outline-none border border-gray-600 focus:border-red-600 active:border-red-600" placeholder="Trailer">
+        </div>
+        <div class="mb-2">
+          <div class="text-red-400 px-4 py-2 font-semibold">Gêneros</div>
+          <input formControlName="GenerosInput" class="w-full rounded bg-gray-700 px-4 py-2 my-0.5 focus:outline-none border border-gray-600 focus:border-red-600 active:border-red-600" placeholder="Enter genres separated by semicolons (;)">
+        </div>
+      </div>
+      <div class="mb-3">
+        <div class="text-red-400 px-4 py-2 font-semibold">Tipo de conteúdo</div>
+        <select formControlName="TipoConteudo" id="tipoconteudo" name="tipoconteudo" class="mb-[13px] rounded px-4 py-2 my-0.5 block w-full border bg-gray-700 dark:text-gray-300 border-gray-600 focus:border-red-600 active:border-red-600 focus:outline-none">
+          <option value="filmes">Filmes</option>
+          <option value="series">Séries</option>
+        </select>
+        <div id="filmes-labels" *ngIf="isFilmesSelected()">
+          <!-- Add other movie-specific labels here -->
+          <div class="mb-2">
+            <div class="text-red-400 px-4 py-2 font-semibold">Duração</div>
+            <input formControlName="Duracao" class="w-full rounded bg-gray-700 px-4 py-2 my-0.5 focus:outline-none border border-gray-600 focus:border-red-600 active:border-red-600" placeholder="Duração">
+          </div>
+        </div>
+        <div id="series-labels" *ngIf="isSeriesSelected()">
+          <!-- Add other series-specific labels here -->
+          <div class="mb-2">
+            <div class="text-red-400 px-4 py-2 font-semibold">Nº de Temporada</div>
+            <input formControlName="NTemporadas" class="w-full rounded bg-gray-700 px-4 py-2 my-0.5 focus:outline-none border border-gray-600 focus:border-red-600 active:border-red-600" placeholder="Nº de Temporada">
+          </div>
+          <div class="mb-2">
+            <div class="text-red-400 px-4 py-2 font-semibold">Nº Total de Episodios</div>
+            <input formControlName="NTEpisodios" class="w-full rounded bg-gray-700 px-4 py-2 my-0.5 focus:outline-none border border-gray-600 focus:border-red-600 active:border-red-600" placeholder="Nº total de Episodios">
+          </div>
+          <div class="mb-2">
+            <div class="text-red-400 px-4 py-2 font-semibold">Estado</div>
+            <input formControlName="Estado" class="w-full rounded bg-gray-700 px-4 py-2 my-0.5 focus:outline-none border border-gray-600 focus:border-red-600 active:border-red-600" placeholder="Estado">
+          </div>
+          <div class="mb-2">
+            <div class="text-red-400 px-4 py-2 font-semibold">Data do Fim</div>
+            <input formControlName="DataFim" class="w-full rounded bg-gray-700 px-4 py-2 my-0.5 focus:outline-none border border-gray-600 focus:border-red-600 active:border-red-600" placeholder="Data do Fim">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-end mt-6">
+      <button (click)="onSubmit()" class="px-6 py-2 leading-5 text-white transition-colors duration-150 transform bg-red-600 rounded-md hover:bg-red-800 focus:outline-none focus:bg-gray-600">Submeter</button>
+    </div>
+  </form>
+</section>

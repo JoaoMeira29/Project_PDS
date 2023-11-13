@@ -1,0 +1,101 @@
+<div class="flex ml-10 mt-10 bg-gray-800 shadow-2xl rounded-lg p-5 m-10">
+  <div class="w-full ml-1">
+    <div *ngFor="let c of conteudo">
+      <h3 class="ml-3 mt-1 text-left text-xl text-red-600 font-semibold leading-8">
+        {{ c.Nome }}
+        <button (click)="AddWatchList()" type="button" [disabled]="isButtonLoading || checkConteudo.length > 0" [class]="checkConteudo.length > 0 ? 'pointer-events-none bg-gray-900 py-1 px-2 rounded text-white text-sm ml-3' : 'text-white hover:text-red-100 bg-red-600 hover:bg-red-700 rounded-md px-2 py-1 text-sm font-medium ml-3'">
+          {{ checkConteudo.length > 0 ? 'Watch\'Listed &check;' : 'Add to Watch\'List' }}
+        </button>
+      </h3>
+      <div class=" text-left ml-3 mt-3 text-gray-400 text-sm font-semibold flex">
+        <p class="mr-5">{{ c.NTemporadas ? 'Serie' : 'Filme' }}</p>
+        <p class="mr-5">{{ c.DataReleased | date:'yyyy-MM-dd' }} {{ c.NTemporadas ? (c.DataFim && (c.DataFim | date:'yyyy-MM-dd') != '1899-12-31' ? " - " + (c.DataFim | date:'yyyy-MM-dd') : " - ongoing") : ""}}</p>
+        <p>{{ c.Duracao ? c.Duracao + " horas" : c.NTemporadas + " Temporada/s" }}</p>
+      </div>
+      <div class="p-2 flex">
+        <img class="ml-1 w-[20rem] h-[29rem]" src="{{ c.Poster }}" alt="John Doe">
+        <div class="ml-[5rem] relative w-[56rem]" >
+          <iframe class="absolute top-0 left-0 w-full h-full" [src]="getTrustedUrl(c.Trailer)" allowfullscreen></iframe>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        <div class="ml-1 w-1/2">
+          <table class="text-xs my-3">
+            <tbody>
+            <tr>
+              <td class="px-2 py-2 text-red-600 font-semibold text-base">Género</td>
+              <td class="px-2 py-2 text-base text-white">
+                <p *ngFor="let genero of generos; let last = last" class="inline-block mr-2">{{ genero.Nome }} {{ !last ? ',' : '' }}</p>
+              </td>
+            </tr>
+            <tr>
+              <td class="px-2 py-2 text-red-600 font-semibold text-base">Direção</td>
+              <td class="px-2 py-2 text-base text-white">{{ c.Realizador }}</td>
+            </tr>
+            <tr>
+              <td class="px-2 py-2 text-red-600 font-semibold text-base">Rating</td>
+              <td class="px-2 py-2 text-base text-white">{{ c.Rating.toFixed(1) }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="-ml-[19.2rem] mr-24 ">
+          <table class="text-xs my-3">
+            <tr>
+              <td class="px-2 py-2 text-red-600 font-semibold text-base">Sinopse</td>
+            </tr>
+            <tr>
+              <td class="px-2 py-2 text-base text-white">{{ c.Sinopse }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="border-t-2 m-10 border-red-600"></div>
+
+<section *ngIf="currentUser.Utilizador_Roles == 'Admin' || currentUser.Utilizador_Roles == 'Premium'" class="p-6 mx-10 bg-indigo-600 rounded-md shadow-md dark:bg-gray-800 my-14">
+  <h1 class="text-xl font-bold text-red capitalize text-red-600">Adicionar Conteudo</h1>
+  <form [formGroup]="newReviewPremiumForm">
+    <div class="mt-2" >
+      <div>
+        <div class="text-red-400 px-4 py-2 font-semibold">Rating</div>
+        <input formControlName="Rating" class="text-white rounded bg-gray-700 px-4 py-2 my-0.5 focus:outline-none border border-gray-600 focus:border-red-600 hover:border-red-600 active:border-red-600" placeholder="Rating">
+        <div *ngIf="newReviewPremiumForm.get('Rating')?.invalid && (newReviewPremiumForm.get('Rating')?.dirty || newReviewPremiumForm.get('Rating')?.touched)">
+          <div *ngIf="newReviewPremiumForm.get('Rating')?.hasError('pattern')" class="text-red-500 mt-1">Invalid rating format</div>
+        </div>
+      </div>
+      <div>
+        <div class="text-red-400 px-4 py-2 font-semibold">Review</div>
+        <textarea formControlName="Review" type="text" class="text-white resize-none w-full rounded bg-gray-700 px-4 py-2 my-0.5 focus:outline-none border border-gray-600 focus:border-red-600 hover:border-red-600 active:border-red-600" placeholder="Review"></textarea>
+      </div>
+    </div>
+    <div class="flex justify-end mt-6">
+      <button (click)="onSubmit()" [disabled]="checkUserReviewPremium.length > 0" class="px-6 py-2 leading-5 text-white transition-colors duration-150 transform bg-red-600 rounded-md hover:bg-red-800 focus:outline-none focus:bg-gray-600 disabled:pointer-events-none disabled:bg-gray-500">Submeter</button>
+    </div>
+  </form>
+</section>
+
+<ng-container *ngIf="reviewP.length > 0; else noReviews">
+  <article *ngFor="let review of reviewP" class="mx-10 my-10">
+    <div class="flex items-center mb-4 space-x-4">
+      <img class="w-10 h-10 rounded-full" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/android/android-original.svg" alt="">
+      <div class="space-y-1 font-medium dark:text-white">
+        <p class="text-red-600" >{{ review.Nome + ' ' + review.Apelido }}</p>
+      </div>
+    </div>
+    <div class="flex items-center mb-1">
+      <svg aria-hidden="true" class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><title>First star</title><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+      <h3 class="ml-2 text-sm font-semibold text-gray-900 dark:text-white">{{ review.Rating.toFixed(1) }}</h3>
+    </div>
+    <p class="mb-2 text-gray-500 dark:text-gray-400">{{ review.Review}}</p>
+  </article>
+</ng-container>
+
+<ng-template #noReviews>
+  <h1 class="text-white text-3xl flex justify-center my-5 mb-12">No public reviews available.</h1>
+</ng-template>
+
+
